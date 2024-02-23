@@ -17,7 +17,7 @@
             var d = new Date(date),
                 month = '' + (d.getMonth() + 1),
                 day = "01";//'' + d.getDate(),
-                year = d.getFullYear();
+            year = d.getFullYear();
 
             if (month.length < 2)
                 month = '0' + month;
@@ -28,13 +28,25 @@
         }
 
         function buildUrl() {
+
             var id = document.getElementById("name").value;
-            
             var date = formatDate(document.getElementById('date').valueAsDate);
-            
-            
-            var url = "https://report.modicare.com/api/report/enrollment/download/"+ id +"/-99999/"+date+"/0/0/true/0/ALL/0/false/false/0";
-            
+
+            const selectedRadio = document.querySelector('input[name="report_type"]:checked');
+            const reportType = selectedRadio.value;
+
+            var url = "#"
+
+            if(reportType == "enrolment")
+            {
+                url = "https://report.modicare.com/api/report/enrollment/download/" + id + "/-99999/" + date + "/0/0/true/0/ALL/0/false/false/0";
+            }
+            else
+            {
+                url = "https://report.modicare.com/api/report/builders/download/"+ id +"/" + date;
+            }
+
+
             document.location.href = url;
 
             return false;
@@ -101,54 +113,6 @@
             margin: 15px 0;
         }
 
-        input[type=radio] {
-            display: none;
-        }
-
-        label#icon {
-            margin: 0;
-            border-radius: 5px 0 0 5px;
-        }
-
-        label.radio {
-            position: relative;
-            display: inline-block;
-            padding-top: 4px;
-            margin-right: 20px;
-            text-indent: 30px;
-            overflow: visible;
-            cursor: pointer;
-        }
-
-        label.radio:before {
-            content: "";
-            position: absolute;
-            top: 2px;
-            left: 0;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background: #1c87c9;
-        }
-
-        label.radio:after {
-            content: "";
-            position: absolute;
-            width: 9px;
-            height: 4px;
-            top: 8px;
-            left: 4px;
-            border: 3px solid #fff;
-            border-top: none;
-            border-right: none;
-            transform: rotate(-45deg);
-            opacity: 0;
-        }
-
-        input[type=radio]:checked+label:after {
-            opacity: 1;
-        }
-
         input[type=text],
         input[type=date],
         input[type=password] {
@@ -195,6 +159,45 @@
         button:hover {
             background: #26a9e0;
         }
+
+        input[type="radio"] {
+            appearance: none;
+            /* Remove default styles */
+            width: 20px;
+            height: 20px;
+            border: 2px solid #ccc;
+            border-radius: 50%;
+            background: white;
+            cursor: pointer;
+        }
+
+        input[type="radio"]:checked {
+            border-color: #26a9e0;
+            background-color: #26a9e0;
+            /* Checked state color */
+        }
+
+        .account-type {
+            /* Display radio buttons and labels inline */
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+        }
+
+        label.radio span {
+            margin: 0 0;
+        }
+
+        .radio {
+            /* Remove default margin and padding */
+            margin: 0 10px;
+            padding: 0;
+        }
+
+        .radio input[type="radio"] {
+            /* Position the radio button next to the label */
+            margin-right: 5px;
+        }
     </style>
 
 </head>
@@ -209,6 +212,21 @@
 
             <label id="icon" for="name"><i class="fas fa-calendar"></i></label>
             <input type="date" name="date" id="date" required />
+
+
+            <hr>
+            <div class="account-type">
+                <label class="radio">
+                    <input type="radio" name="report_type" id="enrolment_report" value="enrolment" checked>
+                    <span>Enrolment report</span>
+                </label>
+                <label class="radio">
+                    <input type="radio" name="report_type" id="builder_report" value="builder">
+                    <span>Builder report</span>
+                </label>
+            </div>
+            <hr>
+
 
             <hr>
             <div class="btn-block">
